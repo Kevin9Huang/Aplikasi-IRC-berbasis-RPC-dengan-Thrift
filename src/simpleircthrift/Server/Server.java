@@ -25,11 +25,10 @@ public class Server {
     public static void main(String[] args) throws Exception{
         final MessageDistributor messageDistributor = new MessageDistributor();
         new Thread(messageDistributor).start();
-        
         TProcessorFactory processFactory = new TProcessorFactory(null){
             @Override
             public TProcessor getProcessor(TTransport trans){
-                messageDistributor.addClient(new MessageServiceClient(trans));
+                messageDistributor.addClient(new MessageServiceClient(trans,MessageDistributor.MaxClientNumber));
                 return  new MessageService.Processor(messageDistributor);
             }
         };

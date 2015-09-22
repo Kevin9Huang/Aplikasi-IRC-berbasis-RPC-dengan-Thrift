@@ -37,7 +37,6 @@ public class ConnectionRequiredRunnable implements ConnectionStatusListener,Runn
         }
         catch(InterruptedException e){
             MyLog.info(String.format("%s caught InterruptedException",threadName));
-            MyLog.info(e.toString());
         }
         MyLog.info(String.format("%s connected, resume execution",threadName));
     }

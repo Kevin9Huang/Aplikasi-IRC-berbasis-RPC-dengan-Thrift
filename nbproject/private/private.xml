@@ -3,19 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/MessageServiceThrift/Message.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/simpleircthrift/Client/ConnectionStatusListener.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/simpleircthrift/Client/ConnectionRequiredRunnable.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/simpleircthrift/Client/MessageReceiver.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/simpleircthrift/Client/MessageSender.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/simpleircthrift/Client/Client.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/simpleircthrift/Client/MessageListener.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/build.xml</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/simpleircthrift/Server/Server.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/simpleircthrift/Server/MessageDistributor.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/MessageServiceThrift/MessageService.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/simpleircthrift/Server/MessageServiceClient.java</file>
-            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/SimpleIRCThrift/src/simpleircthrift/Client/ConnectionStatusMonitor.java</file>
+            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/CurrentPAT/SimpleIRCThrift(2)/src/simpleircthrift/Client/Client.java</file>
+            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/CurrentPAT/SimpleIRCThrift(2)/src/simpleircthrift/Client/MessageListener.java</file>
+            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/CurrentPAT/SimpleIRCThrift(2)/src/simpleircthrift/Client/MessageReceiver.java</file>
+            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/CurrentPAT/SimpleIRCThrift(2)/src/simpleircthrift/Client/MessageSender.java</file>
+            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/CurrentPAT/SimpleIRCThrift(2)/src/simpleircthrift/Server/MessageServiceClient.java</file>
+            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/CurrentPAT/SimpleIRCThrift(2)/src/MessageServiceThrift/MessageService.java</file>
+            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/CurrentPAT/SimpleIRCThrift(2)/src/simpleircthrift/Server/Server.java</file>
+            <file>file:/C:/Users/Kevin/Documents/NetBeansProjects/CurrentPAT/SimpleIRCThrift(2)/src/simpleircthrift/Server/MessageDistributor.java</file>
         </group>
     </open-files>
 </project-private>

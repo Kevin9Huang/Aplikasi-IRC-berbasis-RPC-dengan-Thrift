@@ -7,6 +7,7 @@ package simpleircthrift.Client;
 
 import MessageServiceThrift.Message;
 import MessageServiceThrift.MessageService;
+import com.sun.istack.internal.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -22,16 +23,17 @@ import org.apache.thrift.transport.TTransport;
  * @author Kevin
  */
 public class Client implements  MessageService.Iface{
+    private static final Logger MyLog = Logger.getLogger(Client.class);
     private final ConnectionStatusMonitor connectionMonitor;
     private final MessageSender sender;
     private final MessageReceiver receiver;
-    private final String name;
+    private int clientid;
     private final TTransport transport;
     private final TProtocol protocol;
     private final List<MessageListener> listeners;
     
-    public Client(String name,String server,int port,MessageService.Iface messageHandler){
-        this.name = name;
+    public Client(int clientid,String server,int port,MessageService.Iface messageHandler){
+        this.clientid = -99;
         this.transport = new TSocket(server,port);
         this.protocol = new TBinaryProtocol(transport);
         this.connectionMonitor = new ConnectionStatusMonitor(transport);
@@ -47,35 +49,52 @@ public class Client implements  MessageService.Iface{
         listeners.add(listener);
     }
     public void sendMessageToServer(String msg){
-        sender.send(new Message(name,msg));
+        sender.send(new Message(clientid,msg));
     }
     @Override
     public void sendMessage(Message msg) throws TException {
         for(MessageListener listener : listeners){
-            listener.messageReceived(msg);
+           listener.messageReceived(msg);
         }
+    }
+    
+    @Override
+    public int RequestID() throws TException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public static void main(String[] args) throws Exception{
         MessageService.Iface handler = new MessageService.Iface() {
             @Override
             public void sendMessage(Message msg) throws TException {
-                System.out.println("Got msg: "+msg);
+                System.out.println(msg.message);
+            }
+
+            
+            @Override
+            public int RequestID() throws TException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         };
         Scanner sc = new Scanner(System.in);
-        System.out.print("Input client name: ");
-        String clientname = sc.nextLine();
-        System.out.print("Input server name: ");
-        String servername = sc.nextLine();
         System.out.print("Input port: ");
         int port = sc.nextInt();
-        Client client = new Client(clientname,servername,port,handler);
-        client.sendMessageToServer("Hello There!");
-        for (int i = 0; i < 100; i++) {
-            client.sendMessageToServer(String.format("Message %s", i));
-            Thread.sleep(1000);
+        Client client = new Client(-99,"localhost",port,handler);
+        TTransport transport = new TSocket("localhost",port);
+        transport.open();
+        MessageService.Client requestid = new MessageService.Client(new TBinaryProtocol(transport));
+        client.clientid = requestid.RequestID();
+        String userinput = "";
+        while(!userinput.equals("/EXIT")){
+            System.out.print("Input message: ");
+            userinput = sc.nextLine();
+            if(userinput != ""){
+              client.sendMessageToServer(userinput);
+              Thread.sleep(1000);
+            }
         }
+        //transport.close();
+        System.exit(0);
     }
     
 }
