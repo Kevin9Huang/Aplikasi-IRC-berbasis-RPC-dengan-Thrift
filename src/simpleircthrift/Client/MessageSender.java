@@ -7,7 +7,8 @@ package simpleircthrift.Client;
 
 import MessageServiceThrift.Message;
 import MessageServiceThrift.MessageService;
-import com.sun.istack.internal.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.thrift.TException;
@@ -20,7 +21,7 @@ import simpleircthrift.Server.Server;
  * @author Kevin
  */
 public class MessageSender extends ConnectionRequiredRunnable{
-    private static final Logger MyLog = Logger.getLogger(MessageSender.class);
+    private static final Logger MyLog = LoggerFactory.getLogger(MessageSender.class);
     private final MessageService.Client client;
     private final BlockingQueue<Message> msgSendQueue;
     public MessageSender(
@@ -33,6 +34,10 @@ public class MessageSender extends ConnectionRequiredRunnable{
     
     public void send(Message msg){
         msgSendQueue.add(msg);
+    }
+    
+    public int RequestID() throws TException{
+        return client.RequestID();
     }
     
     public void run(){

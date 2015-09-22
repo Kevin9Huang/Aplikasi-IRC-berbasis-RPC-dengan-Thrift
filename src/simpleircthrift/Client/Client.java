@@ -7,10 +7,12 @@ package simpleircthrift.Client;
 
 import MessageServiceThrift.Message;
 import MessageServiceThrift.MessageService;
-import com.sun.istack.internal.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.thrift.TException;
 import org.apache.thrift.TProcessor;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -23,7 +25,7 @@ import org.apache.thrift.transport.TTransport;
  * @author Kevin
  */
 public class Client implements  MessageService.Iface{
-    private static final Logger MyLog = Logger.getLogger(Client.class);
+    private static final Logger MyLog = LoggerFactory.getLogger(Client.class);
     private final ConnectionStatusMonitor connectionMonitor;
     private final MessageSender sender;
     private final MessageReceiver receiver;
@@ -64,6 +66,8 @@ public class Client implements  MessageService.Iface{
     }
     
     public static void main(String[] args) throws Exception{
+        BasicConfigurator.configure();
+        
         MessageService.Iface handler = new MessageService.Iface() {
             @Override
             public void sendMessage(Message msg) throws TException {
@@ -88,7 +92,7 @@ public class Client implements  MessageService.Iface{
         while(!userinput.equals("/EXIT")){
             System.out.print("Input message: ");
             userinput = sc.nextLine();
-            if(userinput != ""){
+            if(userinput != "" && userinput != "/EXIT"){
               client.sendMessageToServer(userinput);
               Thread.sleep(1000);
             }

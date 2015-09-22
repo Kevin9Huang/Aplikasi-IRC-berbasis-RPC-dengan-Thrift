@@ -6,7 +6,8 @@
 package simpleircthrift.Server;
 
 import MessageServiceThrift.MessageService;
-import com.sun.istack.internal.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 import org.apache.thrift.TProcessor;
 import org.apache.thrift.TProcessorFactory;
@@ -15,14 +16,16 @@ import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransport;
-
+import org.apache.log4j.BasicConfigurator;
 /**
  *
  * @author Kevin
  */
 public class Server {
-    private static final Logger MyLog = Logger.getLogger(Server.class);
+    private static final Logger MyLog = LoggerFactory.getLogger(Server.class);
     public static void main(String[] args) throws Exception{
+        BasicConfigurator.configure();
+        
         final MessageDistributor messageDistributor = new MessageDistributor();
         new Thread(messageDistributor).start();
         TProcessorFactory processFactory = new TProcessorFactory(null){

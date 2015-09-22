@@ -5,14 +5,15 @@
  */
 package simpleircthrift.Client;
 
-import com.sun.istack.internal.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Kevin
  */
 public class ConnectionRequiredRunnable implements ConnectionStatusListener,Runnable{
-    private static final Logger MyLog = Logger.getLogger(ConnectionRequiredRunnable.class);
+    private static final Logger MyLog = LoggerFactory.getLogger(ConnectionRequiredRunnable.class);
     protected final ConnectionStatusMonitor connectionMonitor;
     protected  final String threadName;
     protected Thread executingThread;

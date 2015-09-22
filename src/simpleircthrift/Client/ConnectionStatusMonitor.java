@@ -12,14 +12,16 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import com.sun.istack.internal.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Kevin
  */
 public class ConnectionStatusMonitor {
-    private static final Logger MyLog = Logger.getLogger(ConnectionStatusMonitor.class);
+    private static final Logger MyLog = LoggerFactory.getLogger(ConnectionStatusMonitor.class);
+    
     private class RetryTask extends TimerTask{
 
         @Override

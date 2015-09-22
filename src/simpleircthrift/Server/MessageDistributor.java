@@ -12,7 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import com.sun.istack.internal.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.logging.Level;
 import org.apache.thrift.TException;
 
@@ -22,7 +23,7 @@ import org.apache.thrift.TException;
  */
 public class MessageDistributor implements Iface,Runnable {
 
-    private final static Logger MyLog = Logger.getLogger(MessageDistributor.class);
+    private final static Logger MyLog = LoggerFactory.getLogger(MessageDistributor.class);
     private BlockingQueue<Message> messageQueue;
     private List<MessageServiceClient> clients;
     public static int MaxClientNumber = 0;
@@ -57,25 +58,22 @@ public class MessageDistributor implements Iface,Runnable {
                     Iterator<MessageServiceClient> clientItr = clients.iterator();
                     while(clientItr.hasNext() && !foundclient){
                         clientFound = clientItr.next();
-                        if(msg.clientnid == clientFound.getID()){
-                            foundclient = true;
+                        if(clientFound != null){
+                            if(msg.clientnid == clientFound.getID()){
+                                foundclient = true;
+                            }
                         }
                     }
-                    System.out.println("Client Found "+clientFound);
                     if(msg.message.contains(" ")){
                        firstWord= msg.message.substring(0,msg.message.indexOf(" "));
-                       System.out.println("A : "+msg.message.indexOf(" ")+"b : "+msg.message.length());
                        MessageContains = msg.message.substring(msg.message.indexOf(" ")+1,msg.message.length());
-                       System.out.println("Message Contains : "+MessageContains);
                     }
                     if(foundclient){
                         switch(firstWord){
                             case "/NICK" : 
-                                System.out.println("Nick");
                                 clientFound.setNick(MessageContains);
                                 break;
                             case "/JOIN" : 
-                                System.out.println("Join");
                                 if(!AllChannel.contains(MessageContains)){
                                     AllChannel.add(MessageContains);
                                 }
@@ -83,8 +81,7 @@ public class MessageDistributor implements Iface,Runnable {
                                     clientFound.addChannel(MessageContains);
                                 }
                                 break;
-                            case "/LEAVE" : 
-                                System.out.println("Leave");
+                            case "/LEAVE" :
                                 if(clientFound.getActiveChannel().contains(MessageContains)){
                                     clientFound.removeChannel(MessageContains);
                                 }
@@ -93,19 +90,38 @@ public class MessageDistributor implements Iface,Runnable {
                                 clients.remove(clientFound);
                             default : //Send Message to All User Channel and to specific channel here
                                 try {
-                                    List<String> ChannelList = clientFound.getActiveChannel();
-                                    Iterator<String> itrChannel = ChannelList.iterator();
-                                    while(itrChannel.hasNext()){
-                                        String SendToChannel = itrChannel.next();
-                                        MessageServiceClient ClientTemp;
-                                        Iterator<MessageServiceClient> clientItr2 = clients.iterator();
-                                        while(clientItr2.hasNext()){
-                                            ClientTemp = clientItr2.next();
-                                            if(ClientTemp.getActiveChannel().contains(SendToChannel)){
-                                                ClientTemp.sendMessage(new Message(msg.clientnid ,"["+SendToChannel+"]("+clientFound.getNick()+")"+msg.getMessage()));
+                                    if(msg.message != null && msg.message.length() > 0){
+                                        if(msg.message.charAt(0) == '@' && msg.message.contains(" ")){
+                                            String SendToChannel = msg.message.substring(1,msg.message.indexOf(" "));
+                                            MessageServiceClient ClientTemp;
+                                            Iterator<MessageServiceClient> clientItr2 = clients.iterator();
+                                            while(clientItr2.hasNext()){
+                                                ClientTemp = clientItr2.next();
+                                                if(ClientTemp.getActiveChannel().contains(SendToChannel)){
+                                                    ClientTemp.sendMessage(new Message(msg.clientnid ,"["+SendToChannel+"]("+clientFound.getNick()+")"+msg.getMessage().substring(msg.getMessage().indexOf(" ")+1,msg.getMessage().length())));
+                                                }
+                                            }
+                                        }
+                                        else{
+                                            List<String> ChannelList = clientFound.getActiveChannel();
+                                            Iterator<String> itrChannel = ChannelList.iterator();
+                                            while(itrChannel.hasNext()){
+                                                String SendToChannel = itrChannel.next();
+                                                MessageServiceClient ClientTemp;
+                                                Iterator<MessageServiceClient> clientItr2 = clients.iterator();
+                                                while(clientItr2.hasNext()){
+                                                    ClientTemp = clientItr2.next();
+                                                    if(ClientTemp != null){
+                                                        if(ClientTemp.getActiveChannel().contains(SendToChannel)){
+                                                            ClientTemp.sendMessage(new Message(msg.clientnid ,"["+SendToChannel+"]("+clientFound.getNick()+")"+msg.getMessage()));
+                                                        }
+                                                    }
+                                                    
+                                                }
                                             }
                                         }
                                     }
+                                    
                                     //clientFound.sendMessage(new Message(-99 , msg.getMessage()+" from default"));
                                 } catch (TException te) {
                                     clients.remove(clientFound);
